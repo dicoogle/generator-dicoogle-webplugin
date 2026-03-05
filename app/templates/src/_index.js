@@ -28,9 +28,8 @@ export default class MyPlugin {
     onResult(results) {
         // TODO show results here
     }<% } %>
-<% if (semver.gte(minimumVersion, '2.5.0')) { %>
 
     onReceiveData(data) {
         // retrieve data here
-    }<% } %>
+    }
 }

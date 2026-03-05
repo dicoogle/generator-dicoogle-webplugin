@@ -1,6 +1,6 @@
 import * as React from 'react';
 <% if (dicoogle.slotId === 'result') { %>import type {DicoogleAccess, SearchPatientResult} from 'dicoogle-client';<% } else { %>import type {DicoogleAccess} from 'dicoogle-client';<% } %>
-<% if (semver.gte(minimumVersion, '2.5.0')) { %>import {Webcore, SlotHTMLElement, PluginData} from './webcore';<% } else { %>import {Webcore, SlotHTMLElement} from './webcore';<% } %>
+import {Webcore, SlotHTMLElement, PluginData} from './webcore';
 
 // global Dicoogle access instance
 declare const Dicoogle: DicoogleAccess & Webcore;
@@ -44,7 +44,8 @@ export default class MyPlugin {
 <% if (dicoogle.slotId === 'result') { %>    onResult(results: SearchPatientResult[]) {
         // TODO show results here
     }<% } %>
-<% if (semver.gte(minimumVersion, '2.5.0')) { %>    onReceiveData(data: PluginData) {
+
+    onReceiveData(data: PluginData) {
         // retrieve data here
-    }<% } %>
+    }
 }

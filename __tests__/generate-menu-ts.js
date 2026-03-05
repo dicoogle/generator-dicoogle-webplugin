@@ -1,20 +1,24 @@
-const path = require('path');
-const helpers = require('yeoman-test');
-const child_process = require('child_process');
+import path from 'path';
+import helpers, { result } from 'yeoman-test';
+import child_process from 'child_process';
+import {describe, before, beforeEach, it} from 'node:test';
 
-describe('generator test 1: menu webplugin project in TypeScript', () => {
-    /** @type {helpers.RunResult}  */
-    let runResult;
+const __dirname = import.meta.dirname;
+
+describe('menu webplugin project in TypeScript', () => {
+    const dir = path.join(__dirname, '..');
+
+    before(() => helpers.prepareTemporaryDir());
 
     beforeEach(async () => {
-        runResult = await helpers
-            .create(path.join(__dirname, '..'))
-            .withPrompts({
+        await result
+            .create(dir)
+            .withAnswers({
                 appname: "plugin1",
                 description: "A test plugin (#1)",
                 slotId: "menu",
                 caption: "Test1",
-                minimumVersion: "3.1.0",
+                minimumVersion: "3.5.1",
                 projectType: "typescript",
                 license: "MIT",
                 authorName: "John Doe",
@@ -23,15 +27,10 @@ describe('generator test 1: menu webplugin project in TypeScript', () => {
             })
             .run();
     });
-    afterEach(() => {
-        if (runResult) {
-            runResult.restore();
-        }
-    });
 
     it('generates correctly', () => {
         // contains package.json
-        runResult.assertJsonFileContent('package.json', {
+        result.assertJsonFileContent('package.json', {
             name: "plugin1",
             description: "A test plugin (#1)",
             license: "MIT",
@@ -45,13 +44,12 @@ describe('generator test 1: menu webplugin project in TypeScript', () => {
             },
             devDependencies: {
                 parcel: /.+/,
-                // only Dicoogle 3.1.0 uses dicoogle client v5
                 "dicoogle-client": /\^5/,
             }
         });
 
         // has source files and build files
-        runResult.assertFile([
+        result.assertFile([
             'src/index.ts',
             'tsconfig.json',
             'build-package-json.js',
@@ -59,15 +57,15 @@ describe('generator test 1: menu webplugin project in TypeScript', () => {
             'README.md',
         ]);
 
-        runResult.assertFileContent('src/index.ts', 'export default class MyPlugin');
+        result.assertFileContent('src/index.ts', 'export default class MyPlugin');
 
         // force running npm install on target directory
-        child_process.execSync('npm install --no-audit', {cwd: runResult.cwd});
+        child_process.execSync('npm install --no-audit', {cwd: result.cwd});
 
         // has the output file module.js via `prepare`
-        runResult.assertFileContent('dist/module.js', 'module.exports');
+        result.assertFileContent('dist/module.js', 'module.exports');
         // has the simplified output file package.json
-        runResult.assertJsonFileContent('dist/package.json', {
+        result.assertJsonFileContent('dist/package.json', {
             name: "plugin1",
             description: "A test plugin (#1)",
             license: "MIT",

@@ -2,16 +2,14 @@
   "name": "generator-dicoogle-webplugin",
   "version": "0.8.0",
   "description": "A Yeoman generator for Dicoogle web UI plugin projects",
-  "repository": {
-    "type": "git",
-    "url": "Enet4/generator-dicoogle-webplugin"
-  },
+  "repository": "https://github.com/dicoogle/generator-dicoogle-webplugin",
   "main": "app/index.js",
+  "type": "module",
   "files": [
     "app"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "node --test __tests__/**/*.js"
   },
   "author": "Eduardo Pinho <eduardopinho@bmd-software.com>",
   "license": "MIT",
@@ -20,17 +18,17 @@
     "dicoogle"
   ],
   "engines": {
-    "node": ">=16",
-    "npm": ">=7"
+    "node": ">=22",
+    "npm": ">=9"
   },
   "dependencies": {
     "capitalize": "^2.0.4",
     "semver": "^7.3.7",
-    "yeoman-generator": "^5.7.0"
+    "yeoman-generator": "^8.0.2"
   },
   "devDependencies": {
-    "jest": "^29.0.1",
-    "yeoman-environment": "^3.3.0",
-    "yeoman-test": "^6.3.0"
+    "@yeoman/adapter": "^4.0.2",
+    "yeoman-environment": "^6.0.0",
+    "yeoman-test": "^11.3.1"
   }
 }

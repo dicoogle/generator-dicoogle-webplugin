@@ -1,15 +1,19 @@
-const path = require('path');
-const helpers = require('yeoman-test');
-const child_process = require('child_process');
+import path from 'path';
+import helpers, { result } from 'yeoman-test';
+import child_process from 'child_process';
+import {describe, before, beforeEach, it} from 'node:test';
 
-describe('generator test 3: result-batch webplugin project in TypeScript', () => {
-    /** @type {helpers.RunResult}  */
-    let runResult;
+const __dirname = import.meta.dirname;
+
+describe('result-batch webplugin project in TypeScript', () => {
+    const dir = path.join(__dirname, '..');
+
+    before(() => helpers.prepareTemporaryDir());
 
     beforeEach(async () => {
-        runResult = await helpers
-            .create(path.join(__dirname, '..'))
-            .withPrompts({
+        await result
+            .create(dir)
+            .withAnswers({
                 appname: "plugin3",
                 description: "A test plugin (#3)",
                 slotId: "result-batch",
@@ -23,15 +27,10 @@ describe('generator test 3: result-batch webplugin project in TypeScript', () =>
             })
             .run();
     });
-    afterEach(() => {
-        if (runResult) {
-            runResult.restore();
-        }
-    });
 
     it('generates correctly', () => {
         // contains package.json
-        runResult.assertJsonFileContent('package.json', {
+        result.assertJsonFileContent('package.json', {
             name: "plugin3",
             description: "A test plugin (#3)",
             license: "MIT",
@@ -44,29 +43,28 @@ describe('generator test 3: result-batch webplugin project in TypeScript', () =>
                 "module-file": "module.js"
             },
             devDependencies: {
-                webpack: /.+/,
+                parcel: /.+/,
             }
         });
 
         // has source files and build files
-        // has source files and build files
-        runResult.assertFile([
+        result.assertFile([
             'src/index.ts',
             'build-package-json.js',
             '.gitignore',
             'README.md',
         ]);
 
-        runResult.assertFileContent('src/index.ts', 'export default class MyPlugin');
-        runResult.assertFileContent('src/index.ts', "slot.addEventListener('result-selection-ready', (ev) => {");
+        result.assertFileContent('src/index.ts', 'export default class MyPlugin');
+        result.assertFileContent('src/index.ts', "slot.addEventListener('result-selection-ready', (ev) => {");
 
         // force running npm install on target directory
-        child_process.execSync('npm install --no-audit', {cwd: runResult.cwd});
+        child_process.execSync('npm install --no-audit', {cwd: result.cwd});
 
         // has the output file module.js via `prepare`
-        runResult.assertFileContent('dist/module.js', 'module.exports');
+        result.assertFileContent('dist/module.js', 'module.exports');
         // has the simplified output file package.json
-        runResult.assertJsonFileContent('dist/package.json', {
+        result.assertJsonFileContent('dist/package.json', {
             name: "plugin3",
             description: "A test plugin (#3)",
             license: "MIT",

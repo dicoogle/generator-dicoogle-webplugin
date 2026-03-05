@@ -17,16 +17,16 @@ export interface IssueQueryOptions {
 }
 
 export interface Webcore {
-    issueQuery(query, options: IssueQueryOptions, callback: (error: any, result: any) => void);
-    issueQuery(query, callback: (error: any, result: any) => void);
+    issueQuery(query: string, options: IssueQueryOptions, callback: (error: any, result: any) => void): void;
+    issueQuery(query: string, callback: (error: any, result: any) => void): void;
 
-    addEventListener(eventName: WebcoreEvent, fn: (...args: any[]) => void);
-    addResultListener(fn: (result: any, requestTime: number, options: any) => void);
-    addPluginLoadListener(fn: (plugin: WebPlugin) => void);
+    addEventListener(eventName: WebcoreEvent, fn: (...args: any[]) => void): void;
+    addResultListener(fn: (result: any, requestTime: number, options: any) => void): void;
+    addPluginLoadListener(fn: (plugin: WebPlugin) => void): void;
 
-    emit(eventName: WebcoreEvent, ...args: any[]);
+    emit(eventName: WebcoreEvent, ...args: any[]): void;
     
-    emitSlotSignal(slotDOM: HTMLElement, eventName: WebcoreEvent, data: any);
+    emitSlotSignal(slotDOM: HTMLElement, eventName: WebcoreEvent, data: any): void;
 }
 
 export interface PluginData {
@@ -35,11 +35,11 @@ export interface PluginData {
     results?: SearchPatientResult[];
     [att: string]: any;
 }
-<% if (semver.get(minimumVersion, '3.1.0')) { %>
+
 export interface ResultSelectionReadyEvent {
     detail: ResultSelectionData;
 }
-<% if (semver.get(minimumVersion, '3.3.2')) { %>
+
 export type ResultSelectionData = {search: {data: SearchDetails}, selected: ResultSelection};
 
 export interface SearchDetails {
@@ -47,9 +47,6 @@ export interface SearchDetails {
     elapsedTime: number,
     numResults: number,
 }
-<% } else { %>
-export type ResultSelectionData = ResultSelection;
-<% } %><% } %>
 
 export interface ResultSelection {
     contents: object[],
@@ -60,8 +57,7 @@ export interface SlotHTMLElement extends HTMLElement {
     slotId: string;
     pluginName: string;
     data?: PluginData;
-<% if (semver.get(minimumVersion, '3.1.0')) { %>
+
     addEventListener(eventName: 'result-selection-ready', listener: (ev: ResultSelectionReadyEvent) => void): void;
-<% } %>
     addEventListener(eventName: string, listener: (ev: Event) => void): void;
 }

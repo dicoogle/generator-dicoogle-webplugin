@@ -1,6 +1,6 @@
-const Generator = require('yeoman-generator');
-const capitalize = require('capitalize');
-const semver = require('semver');
+import Generator from 'yeoman-generator';
+import capitalize from 'capitalize';
+import semver from 'semver';
 
 const PLUGIN_TYPES = ['menu', 'result-options', 'result-batch', 'settings' ];
 const EXPERIMENTAL_PLUGIN_TYPES = [...PLUGIN_TYPES, 'search', 'query', 'result' ];
@@ -13,7 +13,7 @@ const EXTERNAL_DEPENDENCIES = [
   'react-bootstrap-table', 'react-imageloader', 'react-router', 'react-router-bootstrap'
 ];
 
-module.exports = class WebpluginGenerator extends Generator {
+export default class WebpluginGenerator extends Generator {
 
   constructor(args, opts) {
     super(args, opts)
@@ -81,11 +81,10 @@ module.exports = class WebpluginGenerator extends Generator {
           name: 'minimumVersion',
           message: 'Please specify the minimum version of Dicoogle required for this plugin.',
           choices: [
+            {name: '3.5.1', value: '3.5.1'},
             {name: '3.3.2', value: '3.3.2'},
-            {name: '3.1.0', value: '3.1.0'},
-            {name: '2.5.0 (legacy)', value: '2.5.0'},
           ],
-          default: '3.3.2'
+          default: '3.5.1'
         },
         {
           type: 'list',
@@ -220,8 +219,8 @@ module.exports = class WebpluginGenerator extends Generator {
         "module-file": "module.js"
       },
       engines: {
-        node: ">= 16",
-        npm: ">= 7"
+        node: ">= 22",
+        npm: ">= 9"
       },
       targets: {
         main: {
@@ -275,7 +274,7 @@ module.exports = class WebpluginGenerator extends Generator {
       pkg.devDependencies[name] = req;
     }
     if (this.projectType === 'typescript') {
-      let dicoogleClientVersion = semver.gte(minimumVersion, '3.1.0') ? '5.1.0' : '^4.1.1';
+      let dicoogleClientVersion = semver.gte(minimumVersion, '3.5.1') ? '^5.3.0' : '~5.1.0';
       pkg.devDependencies['dicoogle-client'] = dicoogleClientVersion;
       if (this.componentType === 'react') {
         pkg.devDependencies['@types/react'] = "^0.14.0";
