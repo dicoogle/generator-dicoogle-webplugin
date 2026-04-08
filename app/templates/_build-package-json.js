@@ -3,7 +3,7 @@
 // Although using the original package.json file works,
 // it is better to provide a simple version to production,
 // to reduce size and simplify the plugin.
-const fs = require('fs');
+const fs = require('node:fs');
 const packageJson = require('./package.json');
 
 const {
